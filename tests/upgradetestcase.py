@@ -1,6 +1,8 @@
 import os
 import unittest
+import transaction
 
+import Globals
 from Testing.ZopeTestCase import ZopeTestCase, installProduct
 
 from Products.GenericSetup.interfaces import EXTENSION
@@ -44,6 +46,16 @@ installProduct('Five')
 
 
 class UpgradeTestCase(ZopeTestCase):
+    
+    # We need to have thee name of the directory that keeps the Data.fs,
+    # so we can check that the test is run with the right Data.fs. Since
+    # each test test a specific CPS version, you would get false errors
+    # if run with the wrong Data.fs.
+    db_dir = None 
+
+    def beforeSetUp(self):
+        self._checkDB()
+        transaction.begin()
 
     def afterSetUp(self):
         # Set the folder to be the portal, so we can log in.
@@ -90,6 +102,18 @@ class UpgradeTestCase(ZopeTestCase):
     def _createSnapshot(self, id='snappy'):
         setuptool = self.app.cps.portal_setup
         setuptool.createSnapshot(id)
+        
+    def _checkDB(self):
+        import pdb;pdb.set_trace()
+        if self.db_dir is None:
+            raise "You have not set the db_dir attribute on your test case"
+        db_file = Globals.DB._storage._base._file_name
+        dir, name = os.path.split(db_file)
+        dir, name = os.path.split(dir)
+        if name == self.db_dir:
+            return True
+        raise "This test was run with the wrong database! Please make sure"\
+              "that you run the tests with the test_all_upgrades script."
 
 
 class PreGenericSetupTestCase(UpgradeTestCase):

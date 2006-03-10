@@ -26,7 +26,9 @@ from upgradetestcase import PreGenericSetupTestCase
 
 
 class TestUpgrade(PreGenericSetupTestCase):
-    
+
+    db_dir = 'cps324'
+
     def test_upgrade(self):
         self._upgrade()
         # XXX Add tests that the upgrade worked!
