@@ -60,7 +60,7 @@ class UpgradeTestCase(ZopeTestCase):
     def afterSetUp(self):
         # Set the folder to be the portal, so we can log in.
         self.folder = self.app.cps
-        self.login('root')
+        self.login('manager')
 
     def _createSetupTool(self):
         self.app.cps.manage_addProduct['CPSCore'].manage_addTool(
@@ -104,7 +104,6 @@ class UpgradeTestCase(ZopeTestCase):
         setuptool.createSnapshot(id)
         
     def _checkDB(self):
-        import pdb;pdb.set_trace()
         if self.db_dir is None:
             raise "You have not set the db_dir attribute on your test case"
         db_file = Globals.DB._storage._base._file_name
@@ -127,7 +126,7 @@ class PreGenericSetupTestCase(UpgradeTestCase):
         # 2. Go to the portal_setup and run all proposed upgrades.
         self._doAllUpgrades()
         # The user folder has now been replaced, so we need to login again.
-        self.login('root')
+        self.login('manager')
         
         # 3. Install the default profile.
         self._installDefaultProfile()
