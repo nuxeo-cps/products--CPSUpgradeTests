@@ -31,7 +31,8 @@ class TestUpgrade(PreGenericSetupTestCase):
 
     def test_upgrade(self):
         self._upgrade()
-        # XXX Add tests that the upgrade worked!
+        self._verifyCalendaring()
+        # XXX Add more tests that the upgrade worked!
                 
 def test_suite():
     return unittest.TestSuite((

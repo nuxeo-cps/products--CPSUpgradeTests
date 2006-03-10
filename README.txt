@@ -20,8 +20,25 @@ Extending the existing tests with new product tests
 ---------------------------------------------------
 
 
-Creating a new version test
----------------------------
+Creating a test for a new CPS Version
+-------------------------------------
+
+- In CPSUpgradeTests/tests create a new subfolder named cpsxyz, where xyz
+  is the version number, for example cps340 for CPS 3.4.0.
+  
+- Copy the custom_zodb.py from cps324 to the new folder.
+
+- Copy the test that most resembles the test you want to do to test_cpsxyz.py.
+
+- Modift test_cpsxyz.py to fit your test:
+
+  1. You need to change the db_dir class attribute to cpsxyz. You may also need to change or modify the
+  test method itself.
+  
+  To be able to reuse the test code, the test method mostly calls only
+  other methods. The first of this method is self._upgrade()
+  
+  
 
 - Create a new empty Zope instance (or at least delete the ZODB in the 
   instance you use). Call the initial user "manager" with password "manager".

@@ -1,5 +1,6 @@
 import os
 import unittest
+import datetime
 import transaction
 
 import Globals
@@ -114,6 +115,47 @@ class UpgradeTestCase(ZopeTestCase):
         raise "This test was run with the wrong database! Please make sure"\
               "that you run the tests with the test_all_upgrades script."
 
+    def _verifyCalendaring(self):
+        """Makes sure the calendar now is correctly installed"""
+
+        # Check that the manager really has a personal calendar.
+        manager_cal = self.app.cps.portal_cpscalendar.getHomeCalendarObject()
+        # It should have two events
+        manager_attendee = manager_cal.getMainAttendee()
+        events = manager_attendee.getEvents((None,None))
+        self.failUnlessEqual(len(events), 2)
+        
+        for event in events:
+            if event.title == 'Private Event':
+                # Make sure the private event is private
+                self.failUnlessEqual(event.access, u'PRIVATE')
+            elif event.title == 'Meeting':
+                # The meeting should have three attendees
+                attendees = event.getAttendeeIds()
+                self.failUnlessEqual(len(attendees), 3)
+                # Both the resource and the workspace calendar should be
+                # attendees to this event
+                self.failUnless(
+                    'CALENDAR!/cps/workspaces/workspace_calendar' in attendees)
+                self.failUnless(
+                    'CALENDAR!/cps/workspaces/resource_calendar' in attendees)
+        
+        # There should be both workspace and resource calendars as well.
+        rescalendar = self.app.cps.workspaces.resource_calendar
+        self.failUnlessEqual(rescalendar._attendee_type, 'RESOURCE')
+
+        wscalendar = self.app.cps.workspaces.workspace_calendar
+        self.failUnlessEqual(wscalendar._attendee_type, 'WORKSPACE')
+        wsattendee = wscalendar.getMainAttendee()
+        events = wsattendee.getEvents((None,None))
+        self.failUnlessEqual(len(events), 2)
+        
+        occurrences = ()
+        for event in events:
+            if event.title == 'Recurring Event':
+                occurrences = event.expand((None, datetime.datetime.max))
+        self.failUnlessEqual(len(occurrences), 5)
+        
 
 class PreGenericSetupTestCase(UpgradeTestCase):
     """Tests upgrades from versions of CPS before Genericsetup support
