@@ -1,0 +1,45 @@
+CPS Contents List
+=================
+
+This file lists all the contents that you would typically create in a CPS
+site to test the upgrades. It's listed product by product. The CPS versions
+that the product is valid for are listed after the product name.
+
+CPSCore/CPSDefault
+------------------
+I'm not sure what kinds of tests should be done here....
+
+
+CPSCalendar + CPSSharedCalendar 
+-------------------------------
+Since CPSCalendar gets migrated to CPSSharedCalendar, the test for them
+is the same. Therefore, the content that should be created is the same.
+
+- A home calendar for the manager (gets created when you go to cps/logged_in).
+
+- A Workspace calendar in /workspaces/ with id 'workspace_calendar'
+
+- A Resource calendar in /workspaces/ with id 'resource_calendar'
+
+- Create a private/personal event in the managers calendar, with the title 
+  "Private Event".
+  
+- Create a meeting in the managers calendar inviting both the workspace
+  calendar and the resource calendar. Call the event "Meeting".
+  
+- Create a weekly recurring event in the workspace calendar, that occurs 
+  five times, for example, having it's first occurence 2006-03-03 and it's
+  last occurrence the 2006-03-31. 
+  For a CPSCalendar event, that means a weekly event starting at 
+  2006-03-03 15:00 and ending at 2006-03-31 16:00.
+  For a CPSSharedCalendar event, that means an event starting at
+  2006-03-03 15:00 and ending at 2006-03-03 16:00, and having it's number of
+  recurrences set to 5 (or the reccuring end date to 2006-03-31).
+  
+CPSDocument
+-----------
+
+
+CPSNewsLetters
+CPSPortlets
+CPSSchemas
