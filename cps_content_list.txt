@@ -5,9 +5,21 @@ This file lists all the contents that you would typically create in a CPS
 site to test the upgrades. It's listed product by product. The CPS versions
 that the product is valid for are listed after the product name.
 
-CPSCore/CPSDefault
-------------------
-I'm not sure what kinds of tests should be done here....
+CPSCore/CPSDefault/CPSDocument
+------------------------------
+I don't know exactly what is complicated here, so I just have some basic
+tests. More tests of things that are likely to be complicated to upgrade
+are welcome.
+
+ - Create a workspace with the id "test_workspace" and a section 
+   with the id "test_section".
+   
+ - Create a Flexible Document with the id test_document and add a text and
+   image block. Set the text to "Main text" and the right text to "Righ text"
+   and add an image.
+   
+ - Publish it both in the root section and the test_section.
+ 
 
 
 CPSCalendar + CPSSharedCalendar 
@@ -22,7 +34,8 @@ is the same. Therefore, the content that should be created is the same.
 - A Resource calendar in /workspaces/ with id 'resource_calendar'
 
 - Create a private/personal event in the managers calendar, with the title 
-  "Private Event".
+  "Private Event". Create a document in /workspaces called
+  "calendar_document, and link from the event to this document.
   
 - Create a meeting in the managers calendar inviting both the workspace
   calendar and the resource calendar. Call the event "Meeting".
@@ -36,11 +49,15 @@ is the same. Therefore, the content that should be created is the same.
   2006-03-03 15:00 and ending at 2006-03-03 16:00, and having it's number of
   recurrences set to 5 (or the reccuring end date to 2006-03-31).
   The event should be named "Recurring Event"
-  
-CPSDocument
------------
-
 
 CPSNewsLetters
+--------------
+I don't know what needs to be tested here.
+
 CPSPortlets
+-----------
+I don't know what needs to be tested here.
+
 CPSSchemas
+----------
+I don't know what needs to be tested here.

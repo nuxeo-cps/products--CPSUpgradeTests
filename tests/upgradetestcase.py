@@ -129,6 +129,8 @@ class UpgradeTestCase(ZopeTestCase):
             if event.title == 'Private Event':
                 # Make sure the private event is private
                 self.failUnlessEqual(event.access, u'PRIVATE')
+                self.failUnlessEqual(event.document, 
+                                     'workspaces/calendar_document')
             elif event.title == 'Meeting':
                 # The meeting should have three attendees
                 attendees = event.getAttendeeIds()
@@ -155,7 +157,27 @@ class UpgradeTestCase(ZopeTestCase):
             if event.title == 'Recurring Event':
                 occurrences = event.expand((None, datetime.datetime.max))
         self.failUnlessEqual(len(occurrences), 5)
+
         
+    def _verifyDocument(self):
+        doc = self.app.cps.workspaces.test_workspace.test_document
+        content = doc.getContent()
+        self.failUnlessEqual(content.content, 'Main text')
+        self.failUnlessEqual(content.content_right, 'Right text')
+        self.failIf(content.photo is None)
+        
+    def _verifyPublishing(self):
+        doc = self.app.cps.workspaces.test_workspace.test_document
+        content = doc.getContent().aq_base
+        
+        root_section = self.app.cps.sections
+        test_section = root_section.test_section
+        self.failUnless(root_section.test_document.getContent().aq_base
+                        is content)
+        self.failUnless(test_section.test_document.getContent().aq_base
+                        is content)
+        
+
 
 class PreGenericSetupTestCase(UpgradeTestCase):
     """Tests upgrades from versions of CPS before Genericsetup support
