@@ -31,8 +31,9 @@ Creating a test for a new CPS Version
 - Copy the test that most resembles the test you want to do to test_cpsxyz.py.
 
 - Modify test_cpsxyz.py to fit your test:
-
-  - You need to change the db_dir class attribute to cpsxyz. 
+  
+  - You need to change the DB_NAME "constant" defined in the beginning of
+    the file to cpsxyz. 
   
   - You need to make sure your testing subclass is the correct one for this
     test. There are currently one testing subclass, but there will be more

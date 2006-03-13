@@ -1,4 +1,5 @@
 # Upgrade from CPS 3.2.4
+DB_NAME = 'cps324'
 
 import os
 import unittest
@@ -13,7 +14,7 @@ import Testing
 # but only after importing Testing (or it will be reset later).
 import App.config
 cfg = App.config.getConfiguration()
-cfg.testinghome = os.path.join(os.path.dirname(__file__), 'cps324')
+cfg.testinghome = os.path.join(os.path.dirname(__file__), DB_NAME)
 
 # During the import of the ZopeLite module, the Zope Application will be
 # started, and it will now use our testinghome, find our custom_zodb.py and
@@ -27,7 +28,7 @@ from upgradetestcase import PreGenericSetupTestCase
 
 class TestUpgrade(PreGenericSetupTestCase):
 
-    db_dir = 'cps324'
+    db_dir = DB_NAME
 
     def test_upgrade(self):
         self._upgrade()

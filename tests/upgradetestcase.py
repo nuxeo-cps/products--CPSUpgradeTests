@@ -130,7 +130,7 @@ class UpgradeTestCase(ZopeTestCase):
                 # Make sure the private event is private
                 self.failUnlessEqual(event.access, u'PRIVATE')
                 self.failUnlessEqual(event.document, 
-                                     'workspaces/calendar_document')
+                                     '/cps/workspaces/calendar_document')
             elif event.title == 'Meeting':
                 # The meeting should have three attendees
                 attendees = event.getAttendeeIds()
@@ -162,9 +162,19 @@ class UpgradeTestCase(ZopeTestCase):
     def _verifyDocument(self):
         doc = self.app.cps.workspaces.test_workspace.test_document
         content = doc.getContent()
-        self.failUnlessEqual(content.content, 'Main text')
-        self.failUnlessEqual(content.content_right, 'Right text')
-        self.failIf(content.photo is None)
+        if getattr(content, 'content', None) is not None:
+            # CPS 3.2.4
+            main = content.content 
+            right = content.content_right
+            photo = content.photo
+        else:
+            # CPS 3.3.8
+            main = content.content_f0 
+            right = content.content_right_f0
+            photo = content.photo_f0
+        self.failUnlessEqual(main, 'Main text')
+        self.failUnlessEqual(right, 'Right text')
+        self.failIf(photo is None)
         
     def _verifyPublishing(self):
         doc = self.app.cps.workspaces.test_workspace.test_document

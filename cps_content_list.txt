@@ -19,8 +19,6 @@ are welcome.
    and add an image.
    
  - Publish it both in the root section and the test_section.
- 
-
 
 CPSCalendar + CPSSharedCalendar 
 -------------------------------
