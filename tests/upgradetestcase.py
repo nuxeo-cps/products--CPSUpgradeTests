@@ -112,8 +112,8 @@ class UpgradeTestCase(ZopeTestCase):
         dir, name = os.path.split(dir)
         if name == self.db_dir:
             return True
-        raise "This test was run with the wrong database! Please make sure"\
-              "that you run the tests with the test_all_upgrades script."
+        raise "This test was run with the wrong database! Please make sure "\
+              "that you run the tests with the test_all_upgrades.sh script."
 
     def _verifyCalendaring(self):
         """Makes sure the calendar now is correctly installed"""
@@ -218,4 +218,19 @@ class PreGenericSetupTestCase(UpgradeTestCase):
             
         # 7. Finally, we make a snapshot
         self._createSnapshot()
+
+
+class PostGenericSetupTestCase(UpgradeTestCase):
+    """Tests upgrades from versions of CPS with Genericsetup support
+    """
+    # XXX This is not actually used yet
+    def _upgrade(self):
+        # 1. Create a before upgrade snapshot.
+        self._createSnapshot('before-upgrade')
+        
+        # 2. Go to the portal_setup and run all proposed upgrades.
+        self._doAllUpgrades()
+            
+        # 3. Finally, we make a snapshot
+        self._createSnapshot('before-upgrade')
                 

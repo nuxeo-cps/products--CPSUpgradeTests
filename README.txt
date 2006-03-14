@@ -8,32 +8,67 @@ Usage
 -----
 
 Install this product in the Products directory of your CPS installation.
-Run the tests with Products/CPSUpgradeTests/run_upgrade_tests
+Run the tests with Products/CPSUpgradeTests/run_upgrade_tests.sh
 
 You can also run each test separately with
-bin/zopectl test --dir Products/CPSUpgradeTests --tests-pattern test_cpsxyz
+bin/zopectl test --dir Products/CPSUpgradeTests --tests-pattern 123
 
-Where you replace xyz with the CPS version, for example 324 or 335.
+Where you replace 123 with the CPS version, for example 324 or 335.
 
 
 Extending the existing tests with new product tests
 ---------------------------------------------------
 
+The tests are all located in files called test_cps123.py, where 123 is the
+version number being tested, for example 338 for CPS 3.3.8. However, all these
+tests do is call methods on the base test case classes. It first calls
+_upgrade(), which performs the actual upgrade. This method comes either from
+upgradetestcase.PreGenericTestCase or upgradetestcase.PostGenericTestCase.
+
+Next it verifies that the upgrade has worked correctly by calling a set of
+_verify*() methods, all defined on upgradetestcase.UpgradeTestCase. 
+
+These are the steps to add the test for a product:
+
+ - Make a new instance of Zope with the correct CPS version installed.
+   CPS v 1.2.3 to follow the standard example. ;-)
+
+ - Copy over the Data.fs from the right folder, in this case
+   CPSUpgradeTests/tests/cps123 to the var directory of your new Zope 
+   instance, and start the server. 
+
+ - Log in with manager/manager and go to the CPS instance. Make sure your
+   product is installed, and create the content or setup that needs upgrade.
+   
+ - Pack the database, exit the server and copy the modified Data.fs back
+   to CPSUpgradeTests/tests/cps123.
+
+ - Add a method on upgradetestcase.UpgradeTestCase, named _verifySomething(),
+   that verifies that the upgrade has worked.
+   
+ - Add the _verifySomething() method to the test method in the test, in 
+   this case test_cps123.py. 
+   
+ - Run the test. Fix the test, or the setup of the objects, or the upgrade
+   until it it works.
+
+ - Repeat with next CPS version until all valid CPS versions are done.
+
 
 Creating a test for a new CPS Version
 -------------------------------------
 
-- In CPSUpgradeTests/tests create a new subfolder named cpsxyz, where xyz
+- In CPSUpgradeTests/tests create a new subfolder named cps123, where 123
   is the version number, for example cps340 for CPS 3.4.0.
   
 - Copy the custom_zodb.py from cps324 to the new folder.
 
-- Copy the test that most resembles the test you want to do to test_cpsxyz.py.
+- Copy the test that most resembles the test you want to do to test_cps123.py.
 
-- Modify test_cpsxyz.py to fit your test:
+- Modify test_cps123.py to fit your test:
   
   - You need to change the DB_NAME "constant" defined in the beginning of
-    the file to cpsxyz. 
+    the file to cps123. 
   
   - You need to make sure your testing subclass is the correct one for this
     test. There are currently one testing subclass, but there will be more
@@ -101,5 +136,36 @@ Creating a test for a new CPS Version
 How it works
 ------------
 
-In each database directory, there is a file called "custom_zodb.py". This file
-will throuhg t
+When running ZopeTestCases they will look for a file name "custom_zodb.py" in
+the directory specified as the testinghome attribute on the configuration.
+When importing the Testing module, it will set the tetsinghome attribute to
+it's own directory, and the custom_zodb.py in lib/python/Testing will be used.
+This specifies the use of an empty "DemoStorage", which is a temporrary
+in-memory storage.
+
+However, we want to override this and use our own databases. Therefore, the
+start of every test_123.py file starts with importing Testing, and then
+overriding the testinghome attribute. This way each test can use it's own
+Data.fs. The custom_zodb.py that is located in each cps123 directory will also
+wrap the Data.fs in a DemoStorage, so that changes is never written to disk.
+
+However, since this database setup is done only once, and there seems to be no
+good way of tearing it down, it means that we can only run one test at a time, 
+since every test needs its own database.
+
+Therefore, the base UpgradeTestCase will in beforeSetup() check that the right
+database is running, to avoid a lot of false failures. 
+Running "bin/zopectl test --dir Products/CPSUpgradeTests" will therefore give
+you error messages like this:
+
+"This test was run with the wrong database! Please make sure that you run the
+tests with the test_all_upgrades script."
+
+To avoid that, you specify which test you want to run, with --tests-pattern 123,
+where 123 as usual is the CPS version.
+
+  bin/zopectl test --dir Products/CPSUpgradeTests --tests-pattern 338
+
+This will run only the upgrade from version 3.3.8. You can of course also
+run all the upgrade tests at once, with the run_all_upgrades.sh script.
+
