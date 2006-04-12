@@ -4,47 +4,17 @@ import datetime
 import transaction
 
 import Globals
+
 from Testing.ZopeTestCase import ZopeTestCase, installProduct
 
 from Products.GenericSetup.interfaces import EXTENSION
 from Products.CPSCore.setuptool import CPSSetupTool
 
-# Install all CPS products that have GenericSetup support:
-installProduct('CPSBlog')
-installProduct('CPSBoxes')
-installProduct('CPSChat')
-installProduct('CPSCollector')
-installProduct('CPSCore')
-installProduct('CPSDefault')
-installProduct('CPSDocument')
-installProduct('CPSForum')
-installProduct('CPSMailAccess')
-installProduct('CPSNewsLetters')
-installProduct('CPSOoo')
-installProduct('CPSPortlets')
-installProduct('CPSRelation')
-installProduct('CPSRemoteController')
-installProduct('CPSRSS')
-installProduct('CPSSchemas')
-installProduct('CPSSharedCalendar')
-installProduct('CPSSkins')
-installProduct('CPSSubscriptions')
-installProduct('CPSTypeMaker')
-installProduct('CPSWiki')
-installProduct('CPSWorkflow')
-
-# Some non CPS Products have to be installed for installs/upgrades to work, 
-# although they do not have any profiles or upgrades by themselves.
-# For CPSDefault install:
-installProduct('ZCTextIndex')
-installProduct('CMFCore')
-# For CPSSharedCalendar install
-installProduct('CalZope') 
-installProduct('CPSonFive')
-
-# Finally, we install Five, which will load all the insalled products ZCML.
-installProduct('Five') 
-
+# Install all Products:
+import OFS.Application
+products = OFS.Application.get_products()
+for product in products:
+    installProduct(product[1], 1)
 
 class UpgradeTestCase(ZopeTestCase):
     
@@ -186,7 +156,6 @@ class UpgradeTestCase(ZopeTestCase):
                         is content)
         self.failUnless(test_section.test_document.getContent().aq_base
                         is content)
-        
 
 
 class PreGenericSetupTestCase(UpgradeTestCase):
