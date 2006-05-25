@@ -192,7 +192,6 @@ class PreGenericSetupTestCase(UpgradeTestCase):
 class PostGenericSetupTestCase(UpgradeTestCase):
     """Tests upgrades from versions of CPS with Genericsetup support
     """
-    # XXX This is not actually used yet
     def _upgrade(self):
         # 1. Create a before upgrade snapshot.
         self._createSnapshot('before-upgrade')
@@ -201,5 +200,5 @@ class PostGenericSetupTestCase(UpgradeTestCase):
         self._doAllUpgrades()
             
         # 3. Finally, we make a snapshot
-        self._createSnapshot('before-upgrade')
+        self._createSnapshot('after-upgrade')
                 
