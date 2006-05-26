@@ -145,7 +145,21 @@ class UpgradeTestCase(ZopeTestCase):
         self.failUnlessEqual(main, 'Main text')
         self.failUnlessEqual(right, 'Right text')
         self.failIf(photo is None)
-        
+
+    def _verifyNewsItem(self):
+        # Make sure News Items are now flexible, and that the file
+        # attachement was included.
+        # This change happened in version 3.3.1, and 
+        # the test is not necessary for later versions.
+        doc = self.app.cps.workspaces.news_with_file
+        content = doc.getContent()
+        self.failUnless(content.attachedFile_f0 is not None)
+        self.failUnless(content.photo is not None)
+
+    def _checkSubGroupSupport(self):
+        groupdir = self.app.cps.portal_directories.groups
+        self.failUnless(hasattr(groupdir, 'hasSubGroupsSupport'))
+
     def _verifyPublishing(self):
         doc = self.app.cps.workspaces.test_workspace.test_document
         content = doc.getContent().aq_base

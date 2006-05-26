@@ -34,6 +34,7 @@ class TestUpgrade(PostGenericSetupTestCase):
         self._upgrade()
         self._verifyDocument()
         self._verifyPublishing()
+        self._checkSubGroupSupport()        
         # There is no calendaring upgrade between 3.4.0 and 3.4.1
         # So we skip this. I have not created any events in the 340
         # database yet either.

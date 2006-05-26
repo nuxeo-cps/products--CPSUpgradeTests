@@ -35,6 +35,7 @@ class TestUpgrade(PreGenericSetupTestCase):
         self._verifyDocument()
         self._verifyPublishing()
         self._verifyCalendaring()
+        self._checkSubGroupSupport()
                 
 def test_suite():
     return unittest.TestSuite((

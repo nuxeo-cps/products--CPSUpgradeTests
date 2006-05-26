@@ -19,6 +19,14 @@ are welcome.
    and add an image.
    
  - Publish it both in the root section and the test_section.
+ 
+
+Known bug 1: When upgrading from 3.2.4 to 3.4.0, the attached files in 
+News items was lost. To test:
+
+ - Create a News document in workspaces root, with an 
+   attached file. Call the News document "news_with_file".
+ 
 
 CPSCalendar + CPSSharedCalendar 
 -------------------------------
