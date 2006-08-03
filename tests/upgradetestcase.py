@@ -32,6 +32,13 @@ class UpgradeTestCase(ZopeTestCase):
         # Set the folder to be the portal, so we can log in.
         self.folder = self.app.cps
         self.login('manager')
+        
+        # Enable the local site:
+        from Products.Five.site.localsite import enableLocalSiteHook
+        from zope.app.component.hooks import setHooks, setSite
+        setHooks()
+        enableLocalSiteHook(self.folder)
+        setSite(self.folder)
 
     def _createSetupTool(self):
         self.app.cps.manage_addProduct['CPSCore'].manage_addTool(
