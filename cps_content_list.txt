@@ -1,5 +1,4 @@
-CPS Contents List
-=================
+CPS Contents List=================
 
 This file lists all the contents that you would typically create in a CPS
 site to test the upgrades. It's listed product by product. The CPS versions
@@ -38,6 +37,8 @@ is the same. Therefore, the content that should be created is the same.
 - A Workspace calendar in /workspaces/ with id 'workspace_calendar'
 
 - A Resource calendar in /workspaces/ with id 'resource_calendar'
+  In CPSCalendar, this is done by editing the calendar object after
+  its creation
 
 - Create a private/personal event in the managers calendar, with the title 
   "Private Event". Create a document in /workspaces called
@@ -45,6 +46,7 @@ is the same. Therefore, the content that should be created is the same.
   
 - Create a meeting in the managers calendar inviting both the workspace
   calendar and the resource calendar. Call the event "Meeting".
+  In CPSCalendar, these invitations can be done only once the event is created
   
 - Create a weekly recurring event in the workspace calendar, that occurs 
   five times, for example, having it's first occurence 2006-03-03 and it's
