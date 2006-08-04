@@ -32,7 +32,7 @@ class UpgradeTestCase(ZopeTestCase):
         # Set the folder to be the portal, so we can log in.
         self.folder = self.app.cps
         self.login('manager')
-        
+
         # Enable the local site:
         from Products.Five.site.localsite import enableLocalSiteHook
         from zope.app.component.hooks import setHooks, setSite
@@ -182,6 +182,11 @@ class UpgradeTestCase(ZopeTestCase):
         self.failUnless(test_section.test_document.getContent().aq_base
                         is content)
 
+    def _verifyFolderDestruction(self):
+        sections = self.app.cps.sections
+        sections.folder_delete(['test_section'])
+        import transaction
+        transaction.commit() # error would be here
 
 
 class PreGenericSetupTestCase(UpgradeTestCase):
