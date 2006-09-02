@@ -182,6 +182,15 @@ class UpgradeTestCase(ZopeTestCase):
         self.failUnless(test_section.test_document.getContent().aq_base
                         is content)
 
+    def _verifyImageBoxTemplet(self):
+        # Take a templet that isn't set by any profile, hence comes straight
+        # from the upgrade procedure
+        templet = self.app.unrestrictedTraverse(
+            'cps/portal_themes/lightskins/1512532755/1060267354/1060893038')
+
+        self.assertEquals(templet.objectIds(), ['image'])
+        self.assertEquals(templet.image.size, 16594)
+
     def _verifyFolderDestruction(self):
         sections = self.app.cps.sections
         sections.folder_delete(['test_section'])
